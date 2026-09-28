@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan PAI Kelas 4 - SD/MI Semester 1</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Fredoka -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        islamic: {
+                            dark: '#064e3b',
+                            primary: '#047857',
+                            light: '#10b981',
+                            amber: '#d97706',
+                            gold: '#f59e0b',
+                            cream: '#fef3c7',
+                            softbg: '#fafaf9'
+                        }
+                    },
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                        amiri: ['Amiri', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #fffbebe6 50%, #ecfdf5 100%);
+            min-height: 100vh;
+        }
+
+        .font-game {
+            font-family: 'Fredoka', cursive, sans-serif;
+        }
+
+        .font-arabic {
+            font-family: 'Amiri', serif;
+            line-height: 2.2;
+        }
+
+        /* Clean Glass Card without wobbling/shaking animations */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(209, 250, 229, 0.9);
+            box-shadow: 0 10px 25px -5px rgba(6, 78, 59, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+            transform: none !important;
+            animation: none !important;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #047857;
+            border-radius: 10px;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #certificate-modal, #certificate-modal * {
+                visibility: visible;
+            }
+            #certificate-modal {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen text-slate-800 antialiased selection:bg-emerald-700 selection:text-white">
+
+    <header class="bg-white/95 backdrop-blur sticky top-0 z-40 border-b border-emerald-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 py-2.5 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="goHome()">
+                <div class="w-10 h-10 rounded-2xl bg-emerald-800 flex items-center justify-center text-white font-bold text-xl shadow-sm">
+                    🕌
+                </div>
+                <div>
+                    <h1 class="font-game font-bold text-base md:text-lg text-emerald-950 leading-tight">
+                        PETUALANGAN PAI KELAS 4
+                    </h1>
+                    <p class="text-xs text-slate-500 font-medium hidden sm:block">Pendidikan Agama Islam & Budi Pekerti • Semester 1 (Kurikulum Merdeka)</p>
+                </div>
+            </div>
+
+            <!-- Header Controls -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <button onclick="goHome()" class="font-game bg-emerald-700 hover:bg-emerald-800 text-white px-3.5 py-1.5 rounded-xl text-xs md:text-sm font-bold shadow-sm transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-house"></i>
+                    <span>Beranda</span>
+                </button>
+
+                <div class="flex items-center bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-1 gap-2">
+                    <button id="btn-audio-toggle" onclick="toggleMute()" class="text-emerald-700 hover:text-emerald-900 text-base font-bold transition" title="Matikan/Hidupkan Suara">
+                        <i id="icon-audio" class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.8" oninput="changeVolume(this.value)" class="w-16 md:w-20 accent-emerald-700 cursor-pointer">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-6 flex flex-col justify-center">
+
+        <!-- WELCOME / LOGIN SCREEN (INSTANT LOGIN - NO LOADING BUFFER) -->
+        <section id="screen-welcome" class="glass-card rounded-3xl p-6 md:p-10 text-center max-w-3xl mx-auto w-full my-auto">
+            <div class="flex justify-center items-center gap-4 mb-4">
+                <div class="w-28 h-28 md:w-32 md:h-32 bg-gradient-to-tr from-emerald-800 to-amber-600 rounded-3xl p-3 shadow-md flex items-center justify-center relative">
+                    <!-- SVG Islamic Mascot / Pak Guru Ahmad -->
+                    <svg viewBox="0 0 120 120" class="w-full h-full drop-shadow-sm">
+                        <circle cx="60" cy="60" r="50" fill="#fef3c7"/>
+                        <!-- Peci / Kopiah -->
+                        <path d="M 35 45 Q 60 25 85 45 L 85 36 Q 60 20 35 36 Z" fill="#064e3b"/>
+                        <rect x="35" y="38" width="50" height="8" rx="2" fill="#047857"/>
+                        <!-- Face -->
+                        <circle cx="60" cy="62" r="26" fill="#fed7aa"/>
+                        <!-- Smiling eyes -->
+                        <path d="M 46 58 Q 52 52 56 58" stroke="#064e3b" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        <path d="M 64 58 Q 68 52 74 58" stroke="#064e3b" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        <!-- Smile -->
+                        <path d="M 50 72 Q 60 82 70 72" stroke="#064e3b" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        <!-- Neat Beard -->
+                        <path d="M 44 68 Q 60 88 76 68 Q 60 82 44 68 Z" fill="#334155"/>
+                        <!-- Scarf / Busana -->
+                        <path d="M 38 84 Q 60 94 82 84 L 86 105 Q 60 110 34 105 Z" fill="#047857"/>
+                    </svg>
+                    <span class="absolute -top-2 -right-2 bg-amber-500 text-white font-bold text-xs px-2.5 py-1 rounded-full border-2 border-white shadow-sm">
+                        ⭐ Pak Guru Ahmad
+                    </span>
+                </div>
+            </div>
+
+            <h2 class="font-game text-2xl md:text-4xl font-extrabold text-emerald-900 mb-1 tracking-wide">
+                PETUALANGAN PAI KELAS 4
+            </h2>
+            <p class="text-xs md:text-sm font-bold text-amber-600 mb-6">
+                Pendidikan Agama Islam dan Budi Pekerti • Kurikulum Merdeka Semester 1
+            </p>
+
+            <div class="bg-emerald-50/80 border-2 border-emerald-200 rounded-2xl p-5 mb-6 max-w-md mx-auto">
+                <label for="student-name-input" class="block font-game text-slate-800 text-sm md:text-base mb-2">
+                    👋 Assalamu'alaikum! Tuliskan Namamu (Nama Lengkap):
+                </label>
+                <input type="text" id="student-name-input" placeholder="Tuliskan nama lengkapmu di sini..." 
+                    onkeydown="if(event.key === 'Enter') handleLogin()"
+                    class="w-full px-4 py-3 rounded-xl border-2 border-emerald-300 focus:border-emerald-600 focus:outline-none text-center font-semibold text-slate-800 shadow-sm transition bg-white">
+                <p class="text-xs text-slate-500 mt-2">Tekan tombol <kbd class="px-1.5 py-0.5 bg-slate-200 rounded text-slate-700 font-bold">ENTER</kbd> atau klik tombol di bawah</p>
+            </div>
+
+            <!-- INSTANT LOGIN BUTTON (NO DELAY / NO SPINNER) -->
+            <button onclick="handleLogin()" class="font-game bg-gradient-to-r from-emerald-700 to-amber-600 hover:from-emerald-800 hover:to-amber-700 text-white font-bold text-lg md:text-xl px-8 py-3.5 rounded-2xl shadow-md transition w-full max-w-md flex items-center justify-center gap-2 mx-auto">
+                <span>🚀</span> MASUK / MULAI PETUALANGAN
+            </button>
+        </section>
+
+        <!-- MAIN HOME / DASHBOARD SCREEN -->
+        <section id="screen-home" class="hidden glass-card rounded-3xl p-6 md:p-8 my-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between border-b border-slate-200 pb-4 mb-6 gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-700 to-amber-500 flex items-center justify-center text-white text-2xl font-bold shadow-sm">
+                        🕌
+                    </div>
+                    <div>
+                        <span id="home-user-badge" class="bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full text-xs">
+                            Siswa: Murid
+                        </span>
+                        <h2 class="font-game text-2xl md:text-3xl font-extrabold text-slate-800 mt-1">
+                            Pilih Bab Pembelajaran PAI
+                        </h2>
+                    </div>
+                </div>
+
+                <button onclick="startQuiz(true)" class="font-game bg-gradient-to-r from-emerald-700 to-amber-600 hover:from-emerald-800 hover:to-amber-700 text-white font-bold px-6 py-3.5 rounded-2xl shadow-md transition flex items-center gap-2">
+                    <span>📝</span> MULAI KUIS EVALUASI (50 SOAL)
+                </button>
+            </div>
+
+            <!-- Chapter Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-4">
+                <!-- Bab 1 Card -->
+                <div onclick="openLevelMaterial(1)" class="bg-white border-2 border-emerald-200 hover:border-emerald-500 rounded-2xl p-5 shadow-sm cursor-pointer transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-start justify-between mb-3">
+                            <span class="bg-emerald-800 text-white font-game text-xs font-bold px-3 py-1 rounded-lg">BAB 1</span>
+                            <span class="text-3xl">📖</span>
+                        </div>
+                        <h3 class="font-game text-xl font-bold text-emerald-900 mb-2">MARI BELAJAR SURAT AT-TIN & HADIS</h3>
+                        <p class="text-xs text-slate-600 mb-4 font-medium leading-relaxed">Membaca, Mengartikan, Memahami Kandungan Surah At-Tin, dan Hadis tentang Silaturahmi.</p>
+                    </div>
+                    <div class="text-xs font-bold text-emerald-700 flex items-center gap-1 pt-2 border-t border-slate-100">
+                        <span>Pelajari Materi Bab 1</span> ➔
+                    </div>
+                </div>
+
+                <!-- Bab 2 Card -->
+                <div onclick="openLevelMaterial(2)" class="bg-white border-2 border-amber-200 hover:border-amber-500 rounded-2xl p-5 shadow-sm cursor-pointer transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-start justify-between mb-3">
+                            <span class="bg-amber-600 text-white font-game text-xs font-bold px-3 py-1 rounded-lg">BAB 2</span>
+                            <span class="text-3xl">✨</span>
+                        </div>
+                        <h3 class="font-game text-xl font-bold text-amber-900 mb-2">TELADAN MULIA ASMAUL HUSNA</h3>
+                        <p class="text-xs text-slate-600 mb-4 font-medium leading-relaxed">Mengenal 5 Asmaul Husna: Al-Malik, Al-Aziz, Al-Quddus, As-Salam, dan Al-Mu'min serta Meneladaninya.</p>
+                    </div>
+                    <div class="text-xs font-bold text-amber-600 flex items-center gap-1 pt-2 border-t border-slate-100">
+                        <span>Pelajari Materi Bab 2</span> ➔
+                    </div>
+                </div>
+
+                <!-- Bab 3 Card -->
+                <div onclick="openLevelMaterial(3)" class="bg-white border-2 border-teal-200 hover:border-teal-500 rounded-2xl p-5 shadow-sm cursor-pointer transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-start justify-between mb-3">
+                            <span class="bg-teal-700 text-white font-game text-xs font-bold px-3 py-1 rounded-lg">BAB 3</span>
+                            <span class="text-3xl">🤝</span>
+                        </div>
+                        <h3 class="font-game text-xl font-bold text-teal-900 mb-2">INDAHNYA SALING MENGHARGAI</h3>
+                        <p class="text-xs text-slate-600 mb-4 font-medium leading-relaxed">Saling Menghargai Keragaman Suku, Agama, Ras, Budaya, dan Budi Pekerti Saling Menghormati.</p>
+                    </div>
+                    <div class="text-xs font-bold text-teal-700 flex items-center gap-1 pt-2 border-t border-slate-100">
+                        <span>Pelajari Materi Bab 3</span> ➔
+                    </div>
+                </div>
+
+                <!-- Bab 4 Card -->
+                <div onclick="openLevelMaterial(4)" class="bg-white border-2 border-blue-200 hover:border-blue-500 rounded-2xl p-5 shadow-sm cursor-pointer transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-start justify-between mb-3">
+                            <span class="bg-blue-600 text-white font-game text-xs font-bold px-3 py-1 rounded-lg">BAB 4</span>
+                            <span class="text-3xl">🌱</span>
+                        </div>
+                        <h3 class="font-game text-xl font-bold text-blue-900 mb-2">MENYAMBUT USIA BALIGH</h3>
+                        <p class="text-xs text-slate-600 mb-4 font-medium leading-relaxed">Tanda-tanda Usia Baligh menurut Fikih & Biologi, Tata Cara Mandi Wajib, dan Kewajiban Syariat.</p>
+                    </div>
+                    <div class="text-xs font-bold text-blue-600 flex items-center gap-1 pt-2 border-t border-slate-100">
+                        <span>Pelajari Materi Bab 4</span> ➔
+                    </div>
+                </div>
+
+                <!-- Bab 5 Card -->
+                <div onclick="openLevelMaterial(5)" class="bg-white border-2 border-purple-200 hover:border-purple-500 rounded-2xl p-5 shadow-sm cursor-pointer transition flex flex-col justify-between md:col-span-2 lg:col-span-2">
+                    <div>
+                        <div class="flex items-start justify-between mb-3">
+                            <span class="bg-purple-700 text-white font-game text-xs font-bold px-3 py-1 rounded-lg">BAB 5</span>
+                            <span class="text-3xl">🕌</span>
+                        </div>
+                        <h3 class="font-game text-xl font-bold text-purple-900 mb-2">KISAH HIJRAH NABI MUHAMMAD SAW KE MADINAH</h3>
+                        <p class="text-xs text-slate-600 mb-4 font-medium leading-relaxed">Sebab Hijrah, Perjalanan ke Madinah, Peristiwa Gua Tsur, Masjid Quba, dan Hikmah Hijrah Rasulullah SAW.</p>
+                    </div>
+                    <div class="text-xs font-bold text-purple-700 flex items-center gap-1 pt-2 border-t border-slate-100">
+                        <span>Pelajari Materi Bab 5</span> ➔
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LEARNING MATERIAL SECTION -->
+        <section id="screen-material" class="hidden glass-card rounded-3xl p-6 md:p-8 my-auto max-h-[85vh] overflow-y-auto">
+            <div class="flex flex-wrap items-center justify-between border-b border-slate-200 pb-4 mb-6 gap-3 sticky top-0 bg-white/95 backdrop-blur z-20 py-2">
+                <div class="flex items-center gap-2">
+                    <button onclick="goHome()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-2 rounded-xl text-xs font-bold transition">
+                        ⬅ Kembali ke Beranda
+                    </button>
+                    <h2 class="font-game text-xl md:text-2xl font-extrabold text-slate-800">
+                        📚 Modul Materi PAI Kelas 4 Semester 1
+                    </h2>
+                </div>
+
+                <div id="quiz-resume-bar" class="hidden flex items-center gap-2">
+                    <button onclick="resumeQuizFromMaterial()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-game px-4 py-2 rounded-xl text-xs md:text-sm font-bold shadow-sm transition flex items-center gap-2">
+                        <span>↩</span> KEMBALI KE KUIS
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chapter Material Tabs -->
+            <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-200 pb-3">
+                <button onclick="switchMaterialTab(1)" id="tab-mat-1" class="font-game text-xs md:text-sm px-4 py-2 rounded-xl bg-emerald-800 text-white font-bold transition">
+                    Bab 1: Surah At-Tin
+                </button>
+                <button onclick="switchMaterialTab(2)" id="tab-mat-2" class="font-game text-xs md:text-sm px-4 py-2 rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold transition">
+                    Bab 2: Asmaul Husna
+                </button>
+                <button onclick="switchMaterialTab(3)" id="tab-mat-3" class="font-game text-xs md:text-sm px-4 py-2 rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold transition">
+                    Bab 3: Saling Menghargai
+                </button>
+                <button onclick="switchMaterialTab(4)" id="tab-mat-4" class="font-game text-xs md:text-sm px-4 py-2 rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold transition">
+                    Bab 4: Usia Baligh
+                </button>
+                <button onclick="switchMaterialTab(5)" id="tab-mat-5" class="font-game text-xs md:text-sm px-4 py-2 rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold transition">
+                    Bab 5: Hijrah Nabi SAW
+                </button>
+            </div>
+
+            <!-- CONTENT BAB 1 -->
+            <div id="mat-content-1" class="space-y-6">
+                <div class="bg-white border-2 border-emerald-100 rounded-2xl p-5 shadow-sm">
+                    <h3 class="font-game text-lg text-emerald-900 font-bold mb-3 flex items-center gap-2">
+                        <span>📖</span> A. Mengenal Surah At-Tin
+                    </h3>
+                    <p class="text-xs md:text-sm text-slate-700 mb-4 leading-relaxed">
+                        Surah At-Tin adalah surah ke-95 dalam Al-Qur'an yang terdiri atas <b>8 ayat</b>. Surah ini tergolong surah <b>Makkiyah</b> karena diturunkan di kota Mekah sebelum Nabi Muhammad SAW berhijrah. Nama "At-Tin" diambil dari kata "At-Tin" pada ayat pertama yang artinya <i>Buah Tin</i>.
+                    </p>
+
+                    <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-4 mb-4">
+                        <h4 class="font-bold text-amber-900 text-sm mb-2">📌 Pokok Kandungan Surah At-Tin:</h4>
+                        <ul class="list-disc list-inside space-y-1.5 text-xs md:text-sm text-slate-700">
+                            <li>Allah SWT bersumpah dengan buah Tin, buah Zaitun, Bukit Sinai, dan Kota Mekah yang aman.</li>
+                            <li>Manusia diciptakan Allah SWT dalam bentuk yang <b>sebaik-baiknya (Ahsani Taqwim)</b>.</li>
+                            <li>Manusia dapat jatuh ke tempat yang serendah-rendahnya jika tidak beriman dan tidak beramal saleh.</li>
+                            <li>Orang yang beriman dan beramal saleh akan mendapatkan pahala yang tidak putus-putus.</li>
+                            <li>Allah SWT adalah <b>Hakim yang Paling Adil (Ahkamul Hakimin)</b>.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-white border-2 border-emerald-100 rounded-2xl p-5 shadow-sm">
+                    <h3 class="font-game text-lg text-emerald-900 font-bold mb-3 flex items-center gap-2">
+                        <span>🤝</span> B. Hadis tentang Silaturahmi
+                    </h3>
+                    <p class="text-xs md:text-sm text-slate-700 leading-relaxed mb-3">
+                        Nabi Muhammad SAW mengajarkan pentingnya menyambung tali silaturahmi (persaudaraan). Silaturahmi mendatangkan banyak keutamaan bagi kehidupan seorang muslim.
+                    </p>
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs md:text-sm">
+                        <h4 class="font-bold text-emerald-900 mb-1">💡 Keutamaan Menyambung Silaturahmi:</h4>
+                        <p class="text-slate-700 mb-1">1. Diberkahi dan dipanjangkan umurnya oleh Allah SWT.</p>
+                        <p class="text-slate-700 mb-1">2. Dilapangkan dan dimudahkan rezekinya.</p>
+                        <p class="text-slate-700">3. Dicintai oleh Allah SWT dan sesama manusia.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENT BAB 2 -->
+            <div id="mat-content-2" class="hidden space-y-6">
+                <div class="bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm">
+                    <h3 class="font-game text-lg text-amber-900 font-bold mb-3 flex items-center gap-2">
+                        <span>✨</span> A. Mengenal 5 Asmaul Husna
+                    </h3>
+                    <p class="text-xs md:text-sm text-slate-700 mb-4 leading-relaxed">
+                        <b>Asmaul Husna</b> artinya nama-nama Allah SWT yang indah dan baik. Jumlah Asmaul Husna ada 99. Pada Kelas 4 Semester 1 ini, kita mempelajari 5 Asmaul Husna:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs md:text-sm">
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                            <span class="text-2xl font-arabic font-bold text-amber-900 block mb-1">اَلْمَلِكُ</span>
+                            <h4 class="font-bold text-amber-900 text-sm">1. Al-Malik</h4>
+                            <p class="text-slate-700 text-xs mt-1">Artinya <b>Maha Merajai / Maha Menguasai</b>. Allah mengatur seluruh alam semesta.</p>
+                        </div>
+
+                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                            <span class="text-2xl font-arabic font-bold text-emerald-900 block mb-1">اَلْعَزِيْزُ</span>
+                            <h4 class="font-bold text-emerald-900 text-sm">2. Al-Aziz</h4>
+                            <p class="text-slate-700 text-xs mt-1">Artinya <b>Maha Mulia / Maha Perkasa</b>. Allah pemilik segala kemuliaan dan kejayaan.</p>
+                        </div>
+
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
+                            <span class="text-2xl font-arabic font-bold text-blue-900 block mb-1">اَلْقُدُّوْسُ</span>
+                            <h4 class="font-bold text-blue-900 text-sm">3. Al-Quddus</h4>
+                            <p class="text-slate-700 text-xs mt-1">Artinya <b>Maha Suci</b>. Allah suci dari segala kekurangan dan cela.</p>
+                        </div>
+
+                        <div class="bg-teal-50 p-4 rounded-xl border border-teal-200">
+                            <span class="text-2xl font-arabic font-bold text-teal-900 block mb-1">اَلسَّلاَمُ</span>
+                            <h4 class="font-bold text-teal-900 text-sm">4. As-Salam</h4>
+                            <p class="text-slate-700 text-xs mt-1">Artinya <b>Maha Sejahtera / Maha Memberi Keselamatan</b>.</p>
+                        </div>
+
+                        <div class="bg-purple-50 p-4 rounded-xl border border-purple-200 md:col-span-2 lg:col-span-1">
+                            <span class="text-2xl font-arabic font-bold text-purple-900 block mb-1">اَلْمُؤْمِنُ</span>
+                            <h4 class="font-bold text-purple-900 text-sm">5. Al-Mu'min</h4>
+                            <p class="text-slate-700 text-xs mt-1">Artinya <b>Maha Memberi Keamanan</b> kepada seluruh makhluk-Nya.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border-2 border-amber-100 rounded-2xl p-5 shadow-sm">
+                    <h3 class="font-game text-lg text-amber-900 font-bold mb-3 flex items-center gap-2">
+                        <span>🌟</span> B. Meneladani Asmaul Husna dalam Kehidupan
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-xs md:text-sm text-slate-700">
+                        <li><b>Meneladani Al-Malik:</b> Menjadi pemimpin yang amanah dan mampu mengendalikan hawa nafsu.</li>
+                        <li><b>Meneladani Al-Aziz:</b> Memiliki sifat mandiri, teguh pendirian, dan tidak mudah menyerah.</li>
+                        <li><b>Meneladani Al-Quddus:</b> Menjaga kebersihan diri, pakaian, tempat tinggal, dan kebersihan hati dari sifat iri dengki.</li>
+                        <li><b>Meneladani As-Salam:</b> Menebarkan kedamaian, suka membantu, dan tidak suka bermusuhan.</li>
+                        <li><b>Meneladani Al-Mu'min:</b> Memberikan rasa aman kepada teman, tidak mengganggu, dan menjaga rahasia.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- CONTENT BAB 3 -->
+            <div id="mat-content-3" class="hidden space-y-6">
+                <div class="bg-white border-2 border-teal-100 rounded-2xl p-5 shadow-sm">
+                    <h3 class="font-game text-lg text-teal-900 font-bold mb-3 flex items-center gap-2">
+                        <span>🤝</span> A. Keragaman Sebagai Sunnatullah
+                    </h3>
+                    <p class="text-xs md:text-sm text-slate-700 mb-4 leading-relaxed">
+                        Allah SWT menciptakan manusia berbangsa-bangsa dan bersuku-suku agar <b>saling mengenal (Li-Ta'arafu)</b>. Keragaman suku, budaya, bahasa, dan agama adalah ketetapan Allah (Sunnatullah) yang harus disyukuri dan dihormati.
+                    </p>
+
+                    <div class="grid md:grid-cols-2 gap-4 text-xs md:text-sm">
+                        <div class="bg-teal-50 p-4 rounded-xl border border-teal-200">
+                            <h4 class="font-bold text-teal-900 mb-2">🕌 Sikap Menghargai Keragaman Agama:</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li>Tidak memaksakan agama kepada orang lain.</li>
+                                <li>Memberikan kesempatan teman beda agama beribadah.</li>
+                                <li>Tetap berbuat baik dan rukun dengan semua teman.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                            <h4 class="font-bold text-emerald-900 mb-2">🇮🇩 Keragaman Suku & Budaya:</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li>Bangsa Indonesia terdiri atas ratusan suku bangsa.</li>
+                                <li>Semboyan kita: <b>Bhinneka Tunggal Ika</b> (Berbeda-beda tetapi tetap satu jua).</li>
+                                <li>Menghargai tradisi yang tidak bertentangan dengan ajaran Islam.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENT BAB 4 -->
+            <div id="mat-content-4" class="hidden space-y-6">
+                <div class="bg-white border-2 border-blue-100 rounded-2xl p-5 shadow-sm">
+                    <h3 class="font-game text-lg text-blue-900 font-bold mb-3 flex items-center gap-2">
+                        <span>🌱</span> A. Pengertian dan Tanda-Tanda Baligh
+                    </h3>
+                    <p class="text-xs md:text-sm text-slate-700 mb-4 leading-relaxed">
+                        <b>Baligh</b> secara bahasa artinya sampai. Secara istilah, baligh adalah kedewasaan bagi seorang muslim sehingga sudah dibebani hukum syariat (disebut <b>Mukallaf</b>).
+                    </p>
+
+                    <div class="grid md:grid-cols-2 gap-4 text-xs md:text-sm mb-4">
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-200">
+                            <h4 class="font-bold text-blue-900 mb-2">📜 Tanda Baligh Menurut Fikih:</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li><b>Mimpi Basah (Ihtilam):</b> Bagi anak laki-laki.</li>
+                                <li><b>Haid (Menstruasi):</b> Bagi anak perempuan (minimal usia 9 tahun).</li>
+                                <li><b>Mencapai Usia 15 Tahun Hijriah:</b> Jika belum mengalami mimpi basah atau haid.</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-200">
+                            <h4 class="font-bold text-amber-900 mb-2">🧬 Perubahan Fisik Menurut Biologi:</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-700">
+                                <li><b>Laki-laki:</b> Suara membesar, tumbuh jakun, dada membidang, tumbuh rambut halus.</li>
+                                <li><b>Perempuan:</b> Pinggul membesar, dada berkembang, kulit lebih halus.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs md:text-sm">
+                        <h4 class="font-bold text-emerald-900 mb-1">⚖️ Kewajiban Setelah Usia Baligh (Mukallaf):</h4>
+                        <p class="text-slate-700">Wajib menjalankan Salat Fardu 5 waktu, Puasa Ramadan, menutup aurat, dan menjauhi perbuatan maksiat.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENT BAB 5 -->
+            <div id="mat-content-5" class="hidden space-y-6">
+                <div class="bg-white border-2 border-purple-100 rounded-2xl p-5 shadow-sm">
+                    <h3 class="font-game text-lg text-purple-900 font-bold mb-3 flex items-center gap-2">
+                        <span>🕌</span> A. Kisah Hijrah Nabi Muhammad SAW ke Madinah
+                    </h3>
+                    <p class="text-xs md:text-sm text-slate-700 mb-4 leading-relaxed">
+                        <b>Hijrah</b> secara bahasa artinya berpindah tempat. Hijrah Nabi Muhammad SAW dan para sahabat dari Mekah ke Yatsrib (sekarang Madinah) terjadi karena tekanan, siksaan, dan kekejaman kaum kafir Quraisy Mekah.
+                    </p>
+
+                    <div class="space-y-3 text-xs md:text-sm">
+                        <div class="bg-purple-50 p-3.5 rounded-xl border border-purple-200">
+                            <h4 class="font-bold text-purple-900 mb-1">1. Latar Belakang Hijrah:</h4>
+                            <p class="text-slate-700">Ancaman pembunuhan Nabi oleh kafir Quraisy, adanya Bai'at 'Aqabah dari warga Yatsrib, dan perintah langsung dari Allah SWT.</p>
+                        </div>
+                        <div class="bg-amber-50 p-3.5 rounded-xl border border-amber-200">
+                            <h4 class="font-bold text-amber-900 mb-1">2. Peristiwa Penting Perjalanan Hijrah:</h4>
+                            <p class="text-slate-700">Nabi SAW ditemani <b>Abu Bakar Ash-Siddiq</b> bersembunyi di <b>Gua Tsur</b> selama 3 hari. Ali bin Abi Thalib menggantikan tidur di tempat tidur Nabi. Nabi membangun masjid pertama yaitu <b>Masjid Quba</b>.</p>
+                        </div>
+                        <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-200">
+                            <h4 class="font-bold text-emerald-900 mb-1">3. Hikmah Hijrah:</h4>
+                            <p class="text-slate-700">Terbentuknya masyarakat Islam di Madinah, persaudaraan antara Kaum Muhajirin (pendatang dari Mekah) dan Kaum Ansar (penduduk Madinah), serta berkembang pesatnya agama Islam.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUIZ SCREEN (50 QUESTIONS) -->
+        <section id="screen-quiz" class="hidden glass-card rounded-3xl p-6 md:p-8 my-auto">
+            <!-- Quiz Header Bar -->
+            <div class="flex flex-wrap items-center justify-between border-b border-slate-200 pb-4 mb-6 gap-2">
+                <div>
+                    <span id="quiz-progress-badge" class="font-game text-xs md:text-sm bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-bold border border-emerald-200">
+                        SOAL 1 DARI 50
+                    </span>
+                    <h3 id="quiz-user-badge" class="font-game text-base md:text-lg font-bold text-slate-800 mt-1">
+                        Siswa: Murid
+                    </h3>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <div class="bg-amber-100 border border-amber-300 px-3.5 py-1.5 rounded-xl text-amber-900 font-game font-bold text-sm">
+                        ⭐ Skor: <span id="quiz-score-display">0</span>
+                    </div>
+                    <button onclick="pauseQuizToMaterial()" class="font-game bg-emerald-700 hover:bg-emerald-800 text-white px-3.5 py-1.5 rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1">
+                        📚 BACA MATERI
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Box -->
+            <div class="bg-white border-2 border-slate-200 rounded-2xl p-5 md:p-6 shadow-sm mb-6">
+                <div class="flex items-center justify-between mb-3">
+                    <span id="question-chapter-badge" class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800">
+                        Bab 1
+                    </span>
+                    <span id="question-difficulty-badge" class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-700">
+                        Mudah
+                    </span>
+                </div>
+
+                <div id="question-context-box" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-3 mb-4 text-xs md:text-sm font-serif italic text-slate-700">
+                </div>
+
+                <p id="question-text" class="font-game text-lg md:text-2xl font-bold text-slate-800 leading-snug mb-6">
+                    Memuat soal...
+                </p>
+
+                <!-- Options Grid -->
+                <div id="options-container" class="grid grid-cols-1 gap-3">
+                </div>
+            </div>
+
+            <!-- Feedback & Explanation Box -->
+            <div id="quiz-feedback-box" class="hidden border-2 rounded-2xl p-5 mb-6 transition-all duration-200">
+                <div class="flex items-center gap-3 mb-2">
+                    <span id="feedback-icon" class="text-2xl"></span>
+                    <h4 id="feedback-title" class="font-game text-xl font-bold"></h4>
+                </div>
+                <div id="feedback-explanation" class="text-xs md:text-sm text-slate-700 leading-relaxed mb-4">
+                </div>
+                <button onclick="nextQuizQuestion()" class="font-game bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-6 py-3 rounded-xl shadow-sm transition">
+                    LANJUT KE SOAL BERIKUTNYA ➔
+                </button>
+            </div>
+        </section>
+
+        <!-- RESULT EVALUATION SCREEN -->
+        <section id="screen-result" class="hidden glass-card rounded-3xl p-6 md:p-10 text-center max-w-2xl mx-auto w-full my-auto">
+            <div id="result-emoji" class="text-5xl mb-3">🎉</div>
+            <h2 class="font-game text-3xl md:text-4xl font-extrabold text-slate-800 mb-1">
+                KUIS EVALUASI PAI SELESAI!
+            </h2>
+            <p id="result-user-title" class="font-game text-lg text-emerald-800 font-bold mb-6">
+                Selamat!
+            </p>
+
+            <div class="bg-gradient-to-br from-emerald-50 to-amber-50 border-2 border-emerald-200 rounded-2xl p-6 mb-6 shadow-inner">
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">Nilai Akhir Evaluasi</p>
+                <div class="font-game text-5xl md:text-6xl font-black text-emerald-800 mb-2">
+                    <span id="final-score-val">0</span> <span class="text-2xl text-slate-400 font-semibold">/ 100</span>
+                </div>
+                
+                <div id="kkm-status-badge" class="inline-block px-4 py-1.5 rounded-full font-game font-bold text-sm mb-4">
+                    STATUS KKM
+                </div>
+
+                <div class="grid grid-cols-2 gap-3 text-xs md:text-sm font-semibold border-t border-emerald-200/60 pt-4">
+                    <div class="bg-emerald-100/70 text-emerald-800 p-2.5 rounded-xl border border-emerald-200">
+                        ✅ Benar: <span id="final-correct-val" class="text-base font-bold">0</span> Soal
+                    </div>
+                    <div class="bg-rose-100/70 text-rose-800 p-2.5 rounded-xl border border-rose-200">
+                        ❌ Salah: <span id="final-wrong-val" class="text-base font-bold">0</span> Soal
+                    </div>
+                </div>
+            </div>
+
+            <!-- Motivational Message Box -->
+            <div id="result-motivation-box" class="hidden bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 mb-6 text-xs md:text-sm text-amber-900 font-semibold">
+                💪 Tetap semangat! Nilaimu belum mencapai KKM (75). Ayo baca lagi materi pembelajaran dan ulangi kuis ini!
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-3">
+                <button id="btn-cert-action" onclick="openCertificateModal()" class="font-game bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-bold px-6 py-3.5 rounded-2xl shadow-md transition flex items-center justify-center gap-2">
+                    <span>🏆</span> LIHAT / CETAK SERTIFIKAT DIGITAL
+                </button>
+                <button id="btn-read-material-again" onclick="openLevelMaterial(1)" class="hidden font-game bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-6 py-3.5 rounded-2xl shadow-md transition items-center justify-center gap-2">
+                    <span>📚</span> BACA MATERI LAGI
+                </button>
+                <button onclick="restartQuiz()" class="font-game bg-slate-700 hover:bg-slate-800 text-white font-bold px-6 py-3.5 rounded-2xl shadow-md transition flex items-center justify-center gap-2">
+                    <span>🔄</span> ULANGI KUIS DARI NO. 1
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- CERTIFICATE MODAL -->
+    <div id="certificate-modal" class="hidden fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm p-4 overflow-y-auto flex items-center justify-center">
+        <div class="bg-white rounded-3xl max-w-4xl w-full p-6 md:p-10 border-8 border-amber-400 relative shadow-2xl my-8">
+            <button onclick="closeCertificateModal()" class="no-print absolute top-4 right-4 bg-slate-100 hover:bg-slate-200 text-slate-600 w-10 h-10 rounded-full font-bold text-xl flex items-center justify-center transition">
+                ✕
+            </button>
+
+            <!-- Printable Certificate Area -->
+            <div class="border-4 border-dashed border-emerald-300 rounded-2xl p-6 md:p-8 text-center bg-gradient-to-b from-amber-50/50 via-white to-emerald-50/30 relative overflow-hidden">
+                <div class="w-16 h-16 mx-auto mb-2 text-amber-500">
+                    <i class="fa-solid fa-award text-5xl"></i>
+                </div>
+                
+                <h3 class="font-game text-xs tracking-widest uppercase font-bold text-emerald-800 mb-1">
+                    SERTIFIKAT PENGHARGAAN PENDIDIKAN AGAMA ISLAM
+                </h3>
+                <h2 class="font-game text-2xl md:text-3xl font-extrabold text-slate-800 mb-4">
+                    PETUALANGAN PAI KELAS 4 SD/MI
+                </h2>
+
+                <p class="text-xs md:text-sm text-slate-600 italic mb-2">Diberikan secara terhormat kepada:</p>
+                <h1 id="cert-student-name" class="font-game text-2xl md:text-4xl font-black text-emerald-800 border-b-2 border-emerald-300 inline-block px-8 py-1 mb-3">
+                    [NAMA SISWA]
+                </h1>
+
+                <p id="cert-predicate-text" class="font-game text-lg font-bold text-amber-600 mb-4">
+                    🏆 BINTANG PAI UTAMA
+                </p>
+
+                <p class="text-xs md:text-sm text-slate-700 max-w-2xl mx-auto leading-relaxed mb-6">
+                    Telah berhasil menyelesaikan 50 Soal Evaluasi Kuis PAI dan Budi Pekerti SD/MI Kelas 4 Semester 1 (Surah At-Tin, Asmaul Husna, Saling Menghargai, Usia Baligh, lan Hijrah Nabi SAW) dengan hasil melampaui KKM (75).
+                </p>
+
+                <div class="inline-flex flex-wrap justify-center gap-6 bg-emerald-50 border border-emerald-200 rounded-2xl px-6 py-3 mb-6 text-xs md:text-sm font-bold text-emerald-900">
+                    <div>Nilai Akhir: <span id="cert-score-display" class="text-emerald-700 font-extrabold">0</span> / 100</div>
+                    <div>Status: <span class="text-emerald-600 font-extrabold">TUNTAS KKM (75)</span></div>
+                    <div>Tanggal: <span id="cert-date-display" class="text-slate-700">-</span></div>
+                </div>
+
+                <div class="flex justify-between items-end text-left border-t border-slate-200 pt-4 text-xs text-slate-500">
+                    <div>
+                        <p class="font-bold text-slate-800">Media Pembelajaran Interaktif</p>
+                        <p>PAI & Budi Pekerti Kelas 4</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-slate-800">Identitas Pengembang:</p>
+                        <p class="text-emerald-700 font-bold">Pengembang: Giga Inovation | 081329200985</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="no-print mt-6 flex justify-center">
+                <button onclick="window.print()" class="font-game bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-8 py-3 rounded-2xl shadow-md transition flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i> CETAK / SIMPAN PDF SERTIFIKAT
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PERSISTENT FOOTER -->
+    <footer class="bg-white/90 backdrop-blur border-t border-emerald-200 py-3 text-center text-xs md:text-sm font-semibold text-slate-600 mt-auto">
+        Pengembang: <span class="text-emerald-800 font-bold">Giga Inovation</span> | 081329200985
+    </footer>
+
+    <script>
+        /* STATE VARIABLES */
+        let studentName = "";
+        let currentQuestionIndex = 0;
+        let score = 0; // 50 questions x 2 pts = 100 max
+        let correctCount = 0;
+        let wrongCount = 0;
+        let isQuizPaused = false;
+        let isMuted = false;
+        let globalVolume = 0.8;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    audioCtx = new AudioContextClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSFX(type) {
+            if (isMuted) return;
+            initAudio();
+            if (!audioCtx) return;
+
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+            gain.gain.setValueAtTime(globalVolume * 0.3, now);
+
+            if (type === 'click') {
+                osc.frequency.setValueAtTime(450, now);
+                osc.frequency.exponentialRampToValueAtTime(850, now + 0.07);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.07);
+                osc.start(now);
+                osc.stop(now + 0.07);
+            } else if (type === 'correct') {
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.1);
+                osc.frequency.setValueAtTime(783.99, now + 0.2);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                osc.start(now);
+                osc.stop(now + 0.35);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.setValueAtTime(160, now + 0.15);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'fanfare') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.12);
+                osc.frequency.setValueAtTime(783.99, now + 0.24);
+                osc.frequency.setValueAtTime(1046.50, now + 0.36);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                osc.start(now);
+                osc.stop(now + 0.6);
+            }
+        }
+
+        function speakIndonesian(text) {
+            if (isMuted) return;
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'id-ID';
+                utterance.volume = globalVolume;
+                utterance.rate = 0.95;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            const icon = document.getElementById('icon-audio');
+            if (isMuted) {
+                icon.className = "fa-solid fa-volume-xmark text-rose-600";
+                window.speechSynthesis.cancel();
+            } else {
+                icon.className = "fa-solid fa-volume-high text-emerald-700";
+                playSFX('click');
+            }
+        }
+
+        function changeVolume(val) {
+            globalVolume = parseFloat(val);
+        }
+
+        function showScreen(screenId) {
+            playSFX('click');
+            const screens = ['screen-welcome', 'screen-home', 'screen-material', 'screen-quiz', 'screen-result'];
+            screens.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+
+            const resumeBar = document.getElementById('quiz-resume-bar');
+            if (isQuizPaused && screenId === 'screen-material') {
+                resumeBar.classList.remove('hidden');
+            } else {
+                resumeBar.classList.add('hidden');
+            }
+        }
+
+        function goHome() {
+            if (studentName) {
+                showScreen('screen-home');
+            } else {
+                showScreen('screen-welcome');
+            }
+        }
+
+        /* INSTANT LOGIN FUNCTION - NO ARTIFICIAL LOADING DELAYS */
+        function handleLogin() {
+            const input = document.getElementById('student-name-input');
+            const val = input.value.trim();
+            if (!val) {
+                alert('Tuliskan namamu terlebih dahulu!');
+                return;
+            }
+            studentName = val;
+            document.getElementById('home-user-badge').textContent = `Siswa: ${studentName}`;
+            
+            // DIRECT INSTANT SWITCH TO DASHBOARD (NO LOADING / SPINNER)
+            showScreen('screen-home');
+            speakIndonesian(`Assalamu'alaikum ${studentName}! Selamat belajar Pendidikan Agama Islam Kelas 4.`);
+        }
+
+        function openLevelMaterial(levelNum) {
+            showScreen('screen-material');
+            switchMaterialTab(levelNum);
+        }
+
+        function switchMaterialTab(tabNum) {
+            playSFX('click');
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById(`tab-mat-${i}`);
+                const content = document.getElementById(`mat-content-${i}`);
+                if (i === tabNum) {
+                    btn.className = "font-game text-xs md:text-sm px-4 py-2 rounded-xl bg-emerald-800 text-white font-bold transition";
+                    content.classList.remove('hidden');
+                } else {
+                    btn.className = "font-game text-xs md:text-sm px-4 py-2 rounded-xl bg-slate-200 text-slate-700 hover:bg-slate-300 font-bold transition";
+                    content.classList.add('hidden');
+                }
+            }
+        }
+
+        function pauseQuizToMaterial() {
+            isQuizPaused = true;
+            showScreen('screen-material');
+        }
+
+        function resumeQuizFromMaterial() {
+            isQuizPaused = false;
+            showScreen('screen-quiz');
+        }
+
+        const questionsData = [
+            // BAB 1: SURAT AT-TIN & HADIS SILATURAHMI (10 SOAL)
+            {
+                chapter: "Bab 1: Surah At-Tin & Hadis",
+                level: "Mudah",
+                question: "Surah At-Tin merupakan surah ke-95 dalam Al-Qur'an yang terdiri atas...",
+                options: ["5 Ayat", "7 Ayat", "8 Ayat", "10 Ayat"],
+                answer: 2,
+                explanation: "Surah At-Tin terdiri atas 8 ayat dan tergolong dalam surah Makkiyah."
+            },
+            {
+                chapter: "Bab 1: Surah At-Tin & Hadis",
+                level: "Mudah",
+                question: "Kata 'At-Tin' dalam surah At-Tin diambil dari ayat pertama yang artinya...",
+                options: ["Buah Zaitun", "Buah Tin", "Bukit Sinai", "Kota Mekah"],
+                answer: 1,
+                explanation: "At-Tin artinya Buah Tin, yaitu buah yang manis, lembut, dan kaya manfaat."
+            },
+            {
+                chapter: "Bab 1: Surah At-Tin & Hadis",
+                level: "Sedang",
+                question: "Surah At-Tin diturunkan di kota Mekah sebelum Nabi berhijrah, sehingga disebut surah...",
+                options: ["Madaniyah", "Makkiyah", "Jahiliyah", "Quraysyiah"],
+                answer: 1,
+                explanation: "Surah yang diturunkan sebelum Nabi SAW berhijrah ke Madinah disebut Surah Makkiyah."
+            },
+            {
+                chapter: "Bab 1: Surah At-Tin & Hadis",
+                level: "Sedang",
+                context: "Ayat 4: 'Laqad khalaqnal-insana fi ahsani taqwim'",
+                question: "Arti dari potongan ayat 'Ahsani Taqwim' adalah manusia diciptakan dalam...",
+                options: ["Bentuk yang paling indah / sebaik-baiknya", "Kondisi yang serba kekurangan", "Tempat yang paling rendah", "Masa yang sangat panjang"],
+                answer: 0,
+                explanation: "Ahsani Taqwim artinya bentuk yang sebaik-baiknya, sempurna jasmani dan rohani."
+            },
+            {
+                chapter: "Bab 1: Surah At-Tin & Hadis",
+                level: "HOTS",
+                question: "Manusia diciptakan dalam bentuk paling sempurna. Namun, manusia bisa jatuh ke tempat serendah-rendahnya apabila...",
+                options: ["Tidak memiliki harta berlimpah", "Tidak beriman dan tidak beramal saleh", "Tidak menjadi pejabat tinggi", "Sering bepergian jauh"],
+                answer: 1,
+                explanation: "Manusia menjadi hina di hadapan Allah jika meninggalkan iman dan tidak melakukan amal kebajikan."
+            },
+            {
+                chapter: "Bab 1: Surah At-Tin & Hadis",
+                level: "Sedang",
+                question: "Allah SWT membalas pahala yang tidak putus-putus kepada orang yang...",
+                options: ["Beriman dan beramal saleh", "Suka berfoya-foya", "Sombong dengan kepintarannya", "Sering memusuhi teman"],
+                answer: 0,
+                explanation: "Dalam ayat 6 disebutkan pahala yang tiada putus-putus (ajrun ghairu mamnun) bagi orang beriman dan beramal saleh."
+            },
+            {
+                chapter: "Bab 1: Surah At-Tin & Hadis",
+                level: "Mudah",
+                question: "Dalam surah At-Tin ayat ke-8, Allah SWT menegaskan bahwa Dia adalah...",
+                options: ["Maha Pencipta", "Hakim yang Paling Adil (Ahkamul Hakimin)", "Maha Pemberi Rezeki", "Maha Mengetahui"],
+                answer: 1,
+                explanation: "'Alaisallahu bi-'ahkamil-hakimin' artinya Bukankah Allah Hakim yang paling adil?"
+            },
+            {
+                chapter: "Bab 1: Surah At-Tin & Hadis",
+                level: "Sedang",
+                question: "Negeri yang aman yang dimaksud dalam sumpah Allah pada surah At-Tin adalah kota...",
+                options: ["Madinah", "Mekah (Makkah al-Mukarramah)", "Yerusalem", "Mesir"],
+                answer: 1,
+                explanation: "'Wa hazal-baladil-amin' mengacu pada Kota Mekah yang aman dan suci."
+            },
+            {
+                chapter: "Bab 1: Surah At-Tin & Hadis",
+                level: "Sedang",
+                question: "Salah satu keutamaan menyambung silaturahmi menurut hadis Nabi Muhammad SAW adalah...",
+                options: ["Dipanjangkan umurnya dan dilapangkan rezekinya", "Mendapatkan pujian dari orang banyak", "Bisa menguasai harta teman", "Bebas dari tugas sekolah"],
+                answer: 0,
+                explanation: "Silaturahmi memperluas rezeki, memanjangkan umur, dan mempererat tali kasih sayang."
+            },
+            {
+                chapter: "Bab 1: Surah At-Tin & Hadis",
+                level: "HOTS",
+                question: "Contoh perilaku meneladani pengajaran Surah At-Tin di lingkungan sekolah adalah...",
+                options: ["Ejek teman yang memiliki kekurangan fisik", "Menjaga sopan santun dan bersyukur atas kelebihan diri", "Memilih teman yang kaya saja", "Malas belajar agama"],
+                answer: 1,
+                explanation: "Menghargai kesempurnaan ciptaan Allah dilakukan dengan bersyukur dan bersopan santun kepada siapapun."
+            },
+
+            // BAB 2: TELADAN MULIA ASMAUL HUSNA (10 SOAL)
+            {
+                chapter: "Bab 2: Asmaul Husna",
+                level: "Mudah",
+                question: "Asmaul Husna secara bahasa memiliki arti...",
+                options: ["Nama-nama tempat suci", "Nama-nama Allah yang indah dan baik", "Doa-doa pendek Al-Qur'an", "Kitab-kitab suci Allah"],
+                answer: 1,
+                explanation: "Asmaul Husna berasal dari kata 'Asma' (nama) dan 'Husna' (baik/indah)."
+            },
+            {
+                chapter: "Bab 2: Asmaul Husna",
+                level: "Mudah",
+                question: "Asmaul Husna Al-Malik memiliki arti bahwa Allah SWT...",
+                options: ["Maha Suci", "Maha Merajai / Menguasai", "Maha Sejahtera", "Maha Memberi Keamanan"],
+                answer: 1,
+                explanation: "Al-Malik artinya Allah Maha Merajai dan Menguasai seluruh alam semesta."
+            },
+            {
+                chapter: "Bab 2: Asmaul Husna",
+                level: "Mudah",
+                question: "Asmaul Husna Al-Aziz mengandungkan arti bahwa Allah SWT...",
+                options: ["Maha Mulia / Maha Perkasa", "Maha Pengasih", "Maha Pengampun", "Maha Mendengar"],
+                answer: 0,
+                explanation: "Al-Aziz artinya Allah Maha Mulia dan Maha Perkasa, tiada siapapun dapat mengalahkan-Nya."
+            },
+            {
+                chapter: "Bab 2: Asmaul Husna",
+                level: "Sedang",
+                question: "Asmaul Husna Al-Quddus artinya Allah Maha Suci. Sifat ini mengajarkan kita untuk...",
+                options: ["Menjaga kebersihan badan, pakaian, lingkungan, dan hati", "Membiarkan kelas kotor", "Mendendam kepada teman", "Pamer kebersihan"],
+                answer: 0,
+                explanation: "Meneladani Al-Quddus berarti menjaga kebersihan fisik dan kebersihan lahir-batin."
+            },
+            {
+                chapter: "Bab 2: Asmaul Husna",
+                level: "Sedang",
+                question: "As-Salam artinya Allah Maha Sejahtera dan Memberi Keselamatan. Cara meneladaninya adalah...",
+                options: ["Suka mencari musuh", "Menebarkan kedamaian dan tidak suka bertengkar", "Mengganggu teman yang sedang shalat", "Membuat keributan"],
+                answer: 1,
+                explanation: "Meneladani As-Salam dilakukan dengan hidup rukun, saling menyapa, dan tidak menyakiti orang lain."
+            },
+            {
+                chapter: "Bab 2: Asmaul Husna",
+                level: "Sedang",
+                question: "Allah SWT memberi rasa aman kepada hamba-hamba-Nya. Hal ini sesuai dengan Asmaul Husna...",
+                options: ["Al-Mu'min", "Al-Malik", "Al-Quddus", "Al-Aziz"],
+                answer: 0,
+                explanation: "Al-Mu'min artinya Allah Maha Memberi Keamanan."
+            },
+            {
+                chapter: "Bab 2: Asmaul Husna",
+                level: "HOTS",
+                question: "Ahmad ditunjuk menjadi ketua kelas. Ia memimpin dengan adil dan tidak sewenang-wenang. Ahmad telah meneladani Asmaul Husna...",
+                options: ["Al-Malik", "Al-Quddus", "As-Salam", "Al-Mu'min"],
+                answer: 0,
+                explanation: "Sikap kepemimpinan yang bijaksana dan mengendalikan diri merupakan bentuk meneladani Al-Malik."
+            },
+            {
+                chapter: "Bab 2: Asmaul Husna",
+                level: "Sedang",
+                question: "Siti tidak mudah putus asa saat nilainya kurang memuaskan dan terus giat belajar. Sikap mandiri dan teguh pendirian ini meneladani...",
+                options: ["Al-Aziz", "As-Salam", "Al-Mu'min", "Al-Quddus"],
+                answer: 0,
+                explanation: "Al-Aziz mengajarkan kita menjadi pribadi yang tangguh, bermartabat, dan tidak gampang menyerah."
+            },
+            {
+                chapter: "Bab 2: Asmaul Husna",
+                level: "Mudah",
+                question: "Menjaga rahasia teman dan tidak menakut-nakuti adiknya adalah contoh perilaku meneladani Asmaul Husna...",
+                options: ["Al-Mu'min", "Al-Quddus", "Al-Malik", "Al-Aziz"],
+                answer: 0,
+                explanation: "Al-Mu'min mengajarkan kita untuk memberikan rasa aman dan saling percaya."
+            },
+            {
+                chapter: "Bab 2: Asmaul Husna",
+                level: "HOTS",
+                question: "Sebelum melakukan salat, seorang muslim diwajibkan bersuci (wudu) dari hadas. Amalan ini sangat erat kaitannya dengan Asmaul Husna...",
+                options: ["Al-Quddus", "Al-Malik", "Al-Mu'min", "Al-Aziz"],
+                answer: 0,
+                explanation: "Wudu bertujuan menyucikan diri sesuai dengan teladan nama Allah Al-Quddus (Maha Suci)."
+            },
+
+            // BAB 3: INDAHNYA SALING MENGHARGAI (10 SOAL)
+            {
+                chapter: "Bab 3: Saling Menghargai",
+                level: "Mudah",
+                question: "Allah SWT menciptakan manusia berbangsa-bangsa dan bersuku-suku dengan tujuan agar...",
+                options: ["Saling memusuhi", "Saling mengenal (Li-ta'arafu)", "Saling bersaing kekayaan", "Saling menjauhi"],
+                answer: 1,
+                explanation: "Dalam Surah Al-Hujurat ayat 13 disebutkan tujuan keragaman adalah agar saling mengenal dan bersilaturahmi."
+            },
+            {
+                chapter: "Bab 3: Saling Menghargai",
+                level: "Mudah",
+                question: "Semboyan bangsa Indonesia yang menggambarkan persatuan di tengah keragaman adalah...",
+                options: ["Tut Wuri Handayani", "Bhinneka Tunggal Ika", "Pancasila Sakti", "Bersatu Kita Teguh"],
+                answer: 1,
+                explanation: "Bhinneka Tunggal Ika artinya berbeda-beda tetapi tetap satu jua."
+            },
+            {
+                chapter: "Bab 3: Saling Menghargai",
+                level: "Sedang",
+                question: "Ketentuan atau ketetapan Allah SWT yang berlaku bagi seluruh alam semesta dan manusia disebut...",
+                options: ["Sunnatullah", "Hukum Adat", "Peraturan Sekolah", "Tradisi Daerah"],
+                answer: 0,
+                explanation: "Sunnatullah adalah hukum dan ketetapan Allah yang berlaku di alam semesta, termasuk keragaman manusia."
+            },
+            {
+                chapter: "Bab 3: Saling Menghargai",
+                level: "Sedang",
+                question: "Contoh toleransi beragama di lingkungan masyarakat yang benar adalah...",
+                options: ["Memaksa jiran ikut shalat", "Memberikan kesempatan tetangga beda agama beribadah dengan tenang", "Mengganggu perayaan agama lain", "Melarang teman beda agama berbuat baik"],
+                answer: 1,
+                explanation: "Toleransi dilakukan dengan menghormati hak beribadah pemeluk agama lain tanpa mengganggu."
+            },
+            {
+                chapter: "Bab 3: Saling Menghargai",
+                level: "HOTS",
+                question: "Di kelas 4 terdapat murid dari suku Jawa, Sunda, Batak, dan Papua. Sikap terbaik saat pembentukan kelompok belajar adalah...",
+                options: ["Hanya mau sekelompok dengan suku yang sama", "Menerima semua anggota kelompok tanpa membeda-bedakan suku", "Menolak belajar bersama", "Meminta guru memisahkan kelompok berdasarkan suku"],
+                answer: 1,
+                explanation: "Saling menghargai dilakukan dengan berteman dan bekerjasama tanpa memandang latar belakang suku."
+            },
+            {
+                chapter: "Bab 3: Saling Menghargai",
+                level: "Sedang",
+                question: "Derajat kemuliaan seseorang di sisi Allah SWT tidak ditentukan oleh suku atau kekayaannya, melainkan oleh...",
+                options: ["Ketakwaannya", "Keturunannya", "Wajah cantiknya", "Jumlah rumahnya"],
+                answer: 0,
+                explanation: "Inna akramakum 'indallahi atqakum (Sesungguhnya yang paling mulia di antara kamu di sisi Allah ialah yang paling bertakwa)."
+            },
+            {
+                chapter: "Bab 3: Saling Menghargai",
+                level: "Mudah",
+                question: "Sikap saling menghormati dan menghargai pendapat orang lain saat bermusyawarah disebut...",
+                options: ["Toleransi / Tasamuh", "Egois", "Sombong", "Apatis"],
+                answer: 0,
+                explanation: "Toleransi (Tasamuh) mencakup sikap mau mendengar dan menghargai pendapat orang lain."
+            },
+            {
+                chapter: "Bab 3: Saling Menghargai",
+                level: "Sedang",
+                question: "Ketika temanmu sedang menyampaikan pendapat di depan kelas, tindakan yang santun adalah...",
+                options: ["Mendengarkan dengan tenang sampai selesai", "Memotong pembicaraannya dengan keras", "Tertawa mengejek", "Bicara sendiri dengan teman sebelah"],
+                answer: 0,
+                explanation: "Mendengarkan dengan tenang merupakan wujud akhlak terpuji dan budi pekerti menghargai sesama."
+            },
+            {
+                chapter: "Bab 3: Saling Menghargai",
+                level: "HOTS",
+                question: "Aplikasi nyata ajaran 'Lakum dinukum waliyadin' (Surah Al-Kafirun) dalam kehidupan adalah...",
+                options: ["Mencampuradukkan tata cara ibadah", "Tetap teguh pada akidah Islam sambil menghormati kebebasan agama lain", "Mengikuti ibadah agama lain", "Memusuhi teman beda agama"],
+                answer: 1,
+                explanation: "Islam mengajarkan toleransi sosial namun tetap menjaga kemurnian akidah dan ibadah masing-masing."
+            },
+            {
+                chapter: "Bab 3: Saling Menghargai",
+                level: "Mudah",
+                question: "Manfaat utama dari hidup saling menghargai di sekolah adalah...",
+                options: ["Terciptanya suasana belajar yang damai, rukun, dan menyenangkan", "Sering terjadi perkelahian", "Murid menjadi malas", "Guru menjadi marah"],
+                answer: 0,
+                explanation: "Kerukunan dan saling menghargai melahirkan kedamaian dan kebahagiaan bersama."
+            },
+
+            // BAB 4: MENYAMBUT USIA BALIGH (10 SOAL)
+            {
+                chapter: "Bab 4: Usia Baligh",
+                level: "Mudah",
+                question: "Secara bahasa kata 'Baligh' memiliki arti...",
+                options: ["Sampai / Cukup Usia", "Kecil", "Tua", "Pintar"],
+                answer: 0,
+                explanation: "Baligh berarti telah sampai pada usia kedewasaan."
+            },
+            {
+                chapter: "Bab 4: Usia Baligh",
+                level: "Mudah",
+                question: "Seseorang yang sudah baligh dan berakal sehat wajib menjalankan syariat Islam. Orang ini disebut...",
+                options: ["Mukallaf", "Muazin", "Munafik", "Muallaf"],
+                answer: 0,
+                explanation: "Mukallaf adalah orang yang telah dibebani hukum dan kewajiban syariat Islam."
+            },
+            {
+                chapter: "Bab 4: Usia Baligh",
+                level: "Sedang",
+                question: "Tanda baligh menurut fikih khusus bagi anak laki-laki adalah mengalami...",
+                options: ["Haid", "Mimpi Basah (Ihtilam)", "Tumbuh gigi susu", "Menangis keras"],
+                answer: 1,
+                explanation: "Mimpi basah (ihtilam) merupakan tanda biologis fikih utama baligh bagi anak laki-laki."
+            },
+            {
+                chapter: "Bab 4: Usia Baligh",
+                level: "Sedang",
+                question: "Tanda baligh menurut fikih khusus bagi anak perempuan adalah...",
+                options: ["Mimpi basah", "Haid (Menstruasi)", "Suara membesar", "Tumbuh jakun"],
+                answer: 1,
+                explanation: "Haid (menstruasi) adalah keluarnya darah dari rahim perempuan secara alami sebagai tanda baligh."
+            },
+            {
+                chapter: "Bab 4: Usia Baligh",
+                level: "Sedang",
+                question: "Apabila anak laki-laki atau perempuan belum mengalami mimpi basah/haid, ia dianggap baligh menurut fikih jika usianya mencapai...",
+                options: ["10 Tahun", "12 Tahun", "15 Tahun Hijriah", "20 Tahun"],
+                answer: 2,
+                explanation: "Batas maksimal usia baligh menurut fikih adalah 15 tahun Hijriah."
+            },
+            {
+                chapter: "Bab 4: Usia Baligh",
+                level: "HOTS",
+                question: "Tumbuhnya jakun dan membesarnya suara pada anak laki-laki merupakan perubahan fisik masa pubertas menurut ilmu...",
+                options: ["Fikih", "Biologi", "Geografi", "Sejarah"],
+                answer: 1,
+                explanation: "Ilmu biologi menjelaskan perkembangan fisik sekunder pria dan wanita saat memasuki usia pubertas."
+            },
+            {
+                chapter: "Bab 4: Usia Baligh",
+                level: "Sedang",
+                question: "Setelah selesai haid atau mimpi basah, seorang muslim diwajibkan menyucikan diri dengan cara...",
+                options: ["Cukup cuci muka", "Mandi Wajib (Mandi Janabah)", "Wudu saja tanpa mandi", "Mengusap baju dengan air"],
+                answer: 1,
+                explanation: "Mandi wajib dilakukan untuk menghilangkan hadas besar agar sah melaksanakan shalat."
+            },
+            {
+                chapter: "Bab 4: Usia Baligh",
+                level: "Mudah",
+                question: "Rukun mandi wajib terdiri dari niat dan...",
+                options: ["Membaca doa makan", "Rukun wudu saja", "Mengalirkan air bersih ke seluruh anggota tubuh", "Shalat dua rakaat"],
+                answer: 2,
+                explanation: "Rukun mandi wajib yaitu niat dan membasahi seluruh anggota tubuh tanpa terkecuali."
+            },
+            {
+                chapter: "Bab 4: Usia Baligh",
+                level: "HOTS",
+                question: "Yang TIDAK boleh dilakukan oleh perempuan yang sedang dalam keadaan haid adalah...",
+                options: ["Mendengarkan ceramah agama", "Melaksanakan Salat dan Puasa", "Belajar materi sekolah", "Berbuat baik kepada sesama"],
+                answer: 1,
+                explanation: "Perempuan haid dilarang shalat, puasa, dan memegang mushaf Al-Qur'an sampai bersuci."
+            },
+            {
+                chapter: "Bab 4: Usia Baligh",
+                level: "Mudah",
+                question: "Salah satu kewajiban utama setelah seseorang memasuki usia baligh adalah menutup...",
+                options: ["Pintu rumah", "Aurat", "Buku pelajaran", "Mata"],
+                answer: 1,
+                explanation: "Menutup aurat menjadi kewajiban mutlak bagi setiap muslim yang sudah mukallaf."
+            },
+
+            // BAB 5: KISAH HIJRAH NABI MUHAMMAD SAW KE MADINAH (10 SOAL)
+            {
+                chapter: "Bab 5: Hijrah Nabi SAW",
+                level: "Mudah",
+                question: "Kata 'Hijrah' secara bahasa memiliki arti...",
+                options: ["Berperang", "Berpindah tempat", "Berdagang", "Bermusyawarah"],
+                answer: 1,
+                explanation: "Hijrah berarti berpindah tempat dari satu daerah ke daerah lain."
+            },
+            {
+                chapter: "Bab 5: Hijrah Nabi SAW",
+                level: "Mudah",
+                question: "Nabi Muhammad SAW dan para sahabat berhijrah dari kota Mekah menuju kota...",
+                options: ["Yatsrib (Madinah)", "Taif", "Yerusalem", "Damaskus"],
+                answer: 0,
+                explanation: "Nabi SAW berhijrah ke kota Yatsrib yang kemudian berganti nama menjadi Madinatun Nabi (Madinah)."
+            },
+            {
+                chapter: "Bab 5: Hijrah Nabi SAW",
+                level: "Sedang",
+                question: "Sebab utama Nabi Muhammad SAW memutuskan berhijrah ke Madinah adalah...",
+                options: ["Kejamnya tekanan kafir Quraisy & perintah Allah SWT", "Ingin berlibur", "Mencari kekayaan di Madinah", "Diinginkan menjadi raja Mekah"],
+                answer: 0,
+                explanation: "Penyiksaan kafir Quraisy yang semakin keras serta adanya perintah Allah memicu keputusan hijrah."
+            },
+            {
+                chapter: "Bab 5: Hijrah Nabi SAW",
+                level: "Sedang",
+                question: "Sahabat setia yang menemani Nabi Muhammad SAW bersembunyi di Gua Tsur saat perjalanan hijrah adalah...",
+                options: ["Umar bin Khattab", "Abu Bakar Ash-Siddiq", "Utsman bin Affan", "Ali bin Abi Thalib"],
+                answer: 1,
+                explanation: "Abu Bakar Ash-Siddiq menemani Nabi SAW menginap di Gua Tsur selama tiga malam."
+            },
+            {
+                chapter: "Bab 5: Hijrah Nabi SAW",
+                level: "HOTS",
+                question: "Pemuda pemberani yang bersedia menggantikan posisi tidur Nabi SAW di tempat tidurnya saat dikepung kafir Quraisy adalah...",
+                options: ["Ali bin Abi Thalib", "Zaid bin Haritsah", "Bilal bin Rabah", "Mus'ab bin Umair"],
+                answer: 0,
+                explanation: "Ali bin Abi Thalib mempertaruhkan nyawanya tidur di kasur Nabi untuk mengecoh pemuda Quraisy."
+            },
+            {
+                chapter: "Bab 5: Hijrah Nabi SAW",
+                level: "Sedang",
+                question: "Tempat bersembunyi Nabi SAW dan Abu Bakar dari kejaran pemuda Kafir Quraisy adalah...",
+                options: ["Gua Hira", "Gua Tsur", "Gua Uhud", "Jabal Nur"],
+                answer: 1,
+                explanation: "Gua Tsur berada di sebelah selatan kota Mekah tempat Nabi bersembunyi."
+            },
+            {
+                chapter: "Bab 5: Hijrah Nabi SAW",
+                level: "Mudah",
+                question: "Masjid pertama yang dibangun oleh Nabi Muhammad SAW dalam perjalanan hijrah adalah...",
+                options: ["Masjid Nabawi", "Masjid Quba", "Masjidil Haram", "Masjid Aqsa"],
+                answer: 1,
+                explanation: "Masjid Quba adalah masjid pertama yang didirikan Rasulullah SAW berdasarkan takwa."
+            },
+            {
+                chapter: "Bab 5: Hijrah Nabi SAW",
+                level: "Sedang",
+                question: "Sebutan bagi kaum muslimin pendatang yang berhijrah dari Mekah ke Madinah adalah Kaum...",
+                options: ["Ansar", "Muhajirin", "Quraisy", "Khazraj"],
+                answer: 1,
+                explanation: "Muhajirin artinya orang-orang yang berhijrah dari Mekah ke Madinah."
+            },
+            {
+                chapter: "Bab 5: Hijrah Nabi SAW",
+                level: "Sedang",
+                question: "Sebutan bagi penduduk asli Madinah yang menyambut dan menolong kaum Muhajirin adalah Kaum...",
+                options: ["Ansar", "Muhajirin", "Baduy", "Quraisy"],
+                answer: 0,
+                explanation: "Ansar artinya para penolong, yaitu penduduk Madinah (Aos dan Khazraj)."
+            },
+            {
+                chapter: "Bab 5: Hijrah Nabi SAW",
+                level: "HOTS",
+                question: "Salah satu hikmah penting dari peristiwa Hijrah Nabi SAW yang dapat diteladani siswa adalah...",
+                options: ["Pantang menyerah dan terus berikhtiar mencari jalan kebaikan", "Gampang putus asa jika menghadapi kesulitan", "Memusuhi orang yang berbeda pendapat", "Mementingkan diri sendiri"],
+                answer: 0,
+                explanation: "Hijrah mengajarkan semangat perjuangan, pengorbanan, pertolongan Allah, dan optimisme tinggi."
+            }
+        ];
+
+        function startQuiz(freshStart = true) {
+            if (freshStart) {
+                currentQuestionIndex = 0;
+                score = 0;
+                correctCount = 0;
+                wrongCount = 0;
+            }
+            isQuizPaused = false;
+            showScreen('screen-quiz');
+            loadQuizQuestion(currentQuestionIndex);
+        }
+
+        function loadQuizQuestion(index) {
+            currentQuestionIndex = index;
+            const q = questionsData[index];
+
+            document.getElementById('quiz-feedback-box').classList.add('hidden');
+
+            document.getElementById('quiz-progress-badge').textContent = `SOAL ${index + 1} DARI ${questionsData.length}`;
+            document.getElementById('quiz-user-badge').textContent = `Siswa: ${studentName}`;
+            document.getElementById('quiz-score-display').textContent = score;
+
+            document.getElementById('question-chapter-badge').textContent = q.chapter;
+            document.getElementById('question-difficulty-badge').textContent = `Tingkat: ${q.level}`;
+
+            const ctxBox = document.getElementById('question-context-box');
+            if (q.context) {
+                ctxBox.textContent = `"${q.context}"`;
+                ctxBox.classList.remove('hidden');
+            } else {
+                ctxBox.classList.add('hidden');
+            }
+
+            document.getElementById('question-text').textContent = q.question;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            const prefixes = ['A', 'B', 'C', 'D'];
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "opt-btn text-left p-3.5 rounded-xl border-2 border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 font-semibold text-slate-700 transition flex items-center gap-3";
+                btn.onclick = () => selectQuizAnswer(idx);
+                btn.innerHTML = `
+                    <span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-sm shrink-0 border border-slate-300">${prefixes[idx]}</span>
+                    <span class="text-xs md:text-sm">${opt}</span>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function selectQuizAnswer(selectedIdx) {
+            const q = questionsData[currentQuestionIndex];
+            const isCorrect = (selectedIdx === q.answer);
+
+            const buttons = document.querySelectorAll('.opt-btn');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === q.answer) {
+                    btn.classList.remove('border-slate-200');
+                    btn.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900');
+                } else if (idx === selectedIdx && !isCorrect) {
+                    btn.classList.remove('border-slate-200');
+                    btn.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-900');
+                }
+            });
+
+            const fbBox = document.getElementById('quiz-feedback-box');
+            const fbIcon = document.getElementById('feedback-icon');
+            const fbTitle = document.getElementById('feedback-title');
+            const fbExp = document.getElementById('feedback-explanation');
+
+            fbBox.classList.remove('hidden');
+
+            if (isCorrect) {
+                playSFX('correct');
+                score += 2; // 50 questions x 2 = 100 max
+                correctCount++;
+                document.getElementById('quiz-score-display').textContent = score;
+
+                fbBox.className = "border-2 rounded-2xl p-5 mb-6 bg-emerald-50 border-emerald-300 text-emerald-900";
+                fbIcon.textContent = "✓";
+                fbTitle.textContent = `BENAR! Hebat sekali, ${studentName}!`;
+                fbExp.innerHTML = `<b>Pembahasan:</b> ${q.explanation}`;
+
+                speakIndonesian(`Benar, ${studentName}! Jawabanmu tepat.`);
+            } else {
+                playSFX('wrong');
+                wrongCount++;
+                fbBox.className = "border-2 rounded-2xl p-5 mb-6 bg-rose-50 border-rose-300 text-rose-900";
+                fbIcon.textContent = "✗";
+                fbTitle.textContent = `BELUM TEPAT, ${studentName}! Tetap semangat!`;
+                fbExp.innerHTML = `<b>Kunci Jawaban Benar:</b> ${q.options[q.answer]}<br><br><b>Pembahasan:</b> ${q.explanation}`;
+
+                speakIndonesian(`Belum tepat, ${studentName}. Mari baca pembahasannya.`);
+            }
+        }
+
+        function nextQuizQuestion() {
+            playSFX('click');
+            if (currentQuestionIndex + 1 < questionsData.length) {
+                loadQuizQuestion(currentQuestionIndex + 1);
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            showScreen('screen-result');
+
+            document.getElementById('result-user-title').textContent = `Selamat, ${studentName}!`;
+            document.getElementById('final-score-val').textContent = score;
+            document.getElementById('final-correct-val').textContent = correctCount;
+            document.getElementById('final-wrong-val').textContent = wrongCount;
+
+            const kkmBadge = document.getElementById('kkm-status-badge');
+            const certBtn = document.getElementById('btn-cert-action');
+            const readMatBtn = document.getElementById('btn-read-material-again');
+            const motivationBox = document.getElementById('result-motivation-box');
+
+            if (score >= 75) {
+                playSFX('fanfare');
+                kkmBadge.textContent = "STATUS: TUNTAS KKM (≥ 75)";
+                kkmBadge.className = "inline-block px-4 py-1.5 rounded-full font-game font-bold text-sm mb-4 bg-emerald-100 text-emerald-800 border border-emerald-300";
+                certBtn.disabled = false;
+                certBtn.classList.remove('hidden', 'opacity-50', 'cursor-not-allowed');
+                readMatBtn.classList.add('hidden');
+                motivationBox.classList.add('hidden');
+
+                speakIndonesian(`Alhamdulillah ${studentName}! Kamu LULUS KKM PAI dengan nilai ${score}! Sertifikatmu telah aktif.`);
+            } else {
+                playSFX('wrong');
+                kkmBadge.textContent = "STATUS: BELUM TUNTAS KKM (< 75)";
+                kkmBadge.className = "inline-block px-4 py-1.5 rounded-full font-game font-bold text-sm mb-4 bg-rose-100 text-rose-800 border border-rose-300";
+                certBtn.classList.add('hidden');
+                readMatBtn.classList.remove('hidden');
+                readMatBtn.classList.add('flex');
+                motivationBox.classList.remove('hidden');
+
+                speakIndonesian(`Nilaimu ${score}, belum mencapai KKM 75. Jangan berkecil hati, ayo baca lagi materinya!`);
+            }
+        }
+
+        function restartQuiz() {
+            startQuiz(true);
+        }
+
+        function openCertificateModal() {
+            if (score < 75) return;
+            playSFX('click');
+
+            document.getElementById('cert-student-name').textContent = studentName;
+            document.getElementById('cert-score-display').textContent = score;
+
+            const predEl = document.getElementById('cert-predicate-text');
+            if (score >= 90) {
+                predEl.textContent = "🏆 BINTANG PAI UTAMA (Sangat Baik)";
+            } else {
+                predEl.textContent = "🌟 SATRIA PAI (Baik)";
+            }
+
+            const d = new Date();
+            const dateStr = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('cert-date-display').textContent = dateStr;
+
+            document.getElementById('certificate-modal').classList.remove('hidden');
+        }
+
+        function closeCertificateModal() {
+            playSFX('click');
+            document.getElementById('certificate-modal').classList.add('hidden');
+        }
+
+        /* INITIAL LOAD - SHOW WELCOME IMMEDIATELY */
+        window.onload = function() {
+            showScreen('screen-welcome');
+        };
+    </script>
+</body>
+</html>
